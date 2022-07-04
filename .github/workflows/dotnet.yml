@@ -1,0 +1,98 @@
+name: DotnetSixProjectBuilder
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false  
+
+    # Add NuGet Sources
+
+    - name: Create Local NuGet Directory
+      run: mkdir ~/nuget
+
+    - name: Add Local Nuget Source
+      run: dotnet nuget add source ~/nuget
+
+    - name: Add GGroupp NuGet Source
+      run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
+
+    # FlowChannel.csproj
+
+    - name: Restore FlowChannel.csproj
+      run: dotnet restore ./src/*/*/FlowChannel.csproj
+
+    - name: Build FlowChannel.csproj
+      run: dotnet build ./src/*/*/FlowChannel.csproj --no-restore  -c Release
+
+    - name: Pack FlowChannel.csproj
+      run: dotnet pack ./src/*/*/FlowChannel.csproj --no-restore -o ~/nuget  -c Release
+
+    # FlowActivity.csproj
+
+    - name: Restore FlowActivity.csproj
+      run: dotnet restore ./src/*/*/FlowActivity.csproj
+
+    - name: Build FlowActivity.csproj
+      run: dotnet build ./src/*/*/FlowActivity.csproj --no-restore  -c Release
+
+    - name: Pack FlowActivity.csproj
+      run: dotnet pack ./src/*/*/FlowActivity.csproj --no-restore -o ~/nuget  -c Release
+
+    # FlowActivity.HeroCard.csproj
+
+    - name: Restore FlowActivity.HeroCard.csproj
+      run: dotnet restore ./src/*/*/FlowActivity.HeroCard.csproj
+
+    - name: Build FlowActivity.HeroCard.csproj
+      run: dotnet build ./src/*/*/FlowActivity.HeroCard.csproj --no-restore  -c Release
+
+    - name: Pack FlowActivity.HeroCard.csproj
+      run: dotnet pack ./src/*/*/FlowActivity.HeroCard.csproj --no-restore -o ~/nuget  -c Release
+
+    # FlowActivity.Telegram.csproj
+
+    - name: Restore FlowActivity.Telegram.csproj
+      run: dotnet restore ./src/*/*/FlowActivity.Telegram.csproj
+
+    - name: Build FlowActivity.Telegram.csproj
+      run: dotnet build ./src/*/*/FlowActivity.Telegram.csproj --no-restore  -c Release
+
+    - name: Pack FlowActivity.Telegram.csproj
+      run: dotnet pack ./src/*/*/FlowActivity.Telegram.csproj --no-restore -o ~/nuget  -c Release
+
+    # FlowMessage.csproj
+
+    - name: Restore FlowMessage.csproj
+      run: dotnet restore ./src/*/*/FlowMessage.csproj
+
+    - name: Build FlowMessage.csproj
+      run: dotnet build ./src/*/*/FlowMessage.csproj --no-restore  -c Release
+
+    - name: Pack FlowMessage.csproj
+      run: dotnet pack ./src/*/*/FlowMessage.csproj --no-restore -o ~/nuget  -c Release
+
+    # FlowMessage.Extensions.csproj
+
+    - name: Restore FlowMessage.Extensions.csproj
+      run: dotnet restore ./src/*/*/FlowMessage.Extensions.csproj
+
+    - name: Build FlowMessage.Extensions.csproj
+      run: dotnet build ./src/*/*/FlowMessage.Extensions.csproj --no-restore  -c Release
+
+    - name: Pack FlowMessage.Extensions.csproj
+      run: dotnet pack ./src/*/*/FlowMessage.Extensions.csproj --no-restore -o ~/nuget  -c Release
+
+    # Push
+
+    - name: Push Packages
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate

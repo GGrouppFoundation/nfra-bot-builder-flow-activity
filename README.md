@@ -1,1 +1,1 @@
-# nfra-bot-builder-flow-activity
+# infra-bot-builder-flow-activity
