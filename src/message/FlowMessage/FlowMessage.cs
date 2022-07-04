@@ -6,12 +6,12 @@ namespace GGroupp.Infra.Bot.Builder;
 
 public sealed record class FlowMessage<T> where T : notnull
 {
-    public FlowMessage(FlowChannel channel, string fromId, [AllowNull] string temporaryActivityId, [DisallowNull] T message)
+    public FlowMessage(FlowChannel channel, string fromId, [AllowNull] string temporaryActivityId, [DisallowNull] T value)
     {
         Channel = channel;
         FromId = fromId ?? string.Empty;
         TemporaryActivityId = string.IsNullOrEmpty(temporaryActivityId) ? null : temporaryActivityId;
-        Message = message ?? throw new ArgumentNullException(nameof(message));
+        Value = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     [JsonPropertyName("channel")]
@@ -24,5 +24,5 @@ public sealed record class FlowMessage<T> where T : notnull
     public string? TemporaryActivityId { get; }
 
     [JsonPropertyName("message")]
-    public T Message { get; }
+    public T Value { get; }
 }
