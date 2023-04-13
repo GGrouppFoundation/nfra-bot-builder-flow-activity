@@ -7,8 +7,8 @@ partial class FlowMessageExtenions
     public static FlowActivity CreateAttachmentActivity<T>(this FlowMessage<T> message, FlowAttachment attachment)
         where T : notnull
     {
-        _ = message ?? throw new ArgumentNullException(nameof(message));
-        _ = attachment ?? throw new ArgumentNullException(nameof(attachment));
+        ArgumentNullException.ThrowIfNull(message);
+        ArgumentNullException.ThrowIfNull(attachment);
 
         return new(channel: message.Channel, recipientId: message.FromId)
         {

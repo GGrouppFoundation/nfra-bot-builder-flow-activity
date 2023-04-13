@@ -73,5 +73,5 @@ public sealed record class FlowActivity
     public FlowAttachmentLayoutType? AttachmentLayout { get; init; }
 
     [JsonPropertyName("attachments")]
-    public IReadOnlyCollection<FlowAttachment>? Attachments { get; init; }
+    public FlatArray<FlowAttachment>? Attachments { get; init; }
 }
