@@ -7,7 +7,7 @@ partial class FlowMessageExtenions
     public static FlowActivity CreateTextActivity<T>(this FlowMessage<T> message, string text)
         where T : notnull
     {
-        _ = message ?? throw new ArgumentNullException(nameof(message));
+        ArgumentNullException.ThrowIfNull(message);
 
         return new(channel: message.Channel, recipientId: message.FromId)
         {

@@ -1,4 +1,5 @@
-name: DotnetSixProjectBuilder
+name: Build and push .NET packages
+
 on:
   push:
 
@@ -7,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false  
+    - uses: actions/checkout@v3
 
-    # Add NuGet Sources
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'
+        
+     # Add NuGet Sources
 
     - name: Create Local NuGet Directory
       run: mkdir ~/nuget
@@ -23,7 +24,12 @@ jobs:
       run: dotnet nuget add source ~/nuget
 
     - name: Add GGroupp NuGet Source
-      run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
+      run: >
+        dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }}
+        -n ggroupp
+        -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }}
+        -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }}
+        --store-password-in-clear-text
 
     # FlowChannel.csproj
 
@@ -95,4 +101,8 @@ jobs:
 
     - name: Push Packages
       if: ${{ github.ref == 'refs/heads/main' }}
-      run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
+      run: >
+        dotnet nuget push "../../../nuget/*.nupkg"
+        -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }}
+        -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }}
+        --skip-duplicate

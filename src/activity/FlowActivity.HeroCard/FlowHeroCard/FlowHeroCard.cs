@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
@@ -18,10 +18,10 @@ public sealed record class FlowHeroCard
     public string? Text { get; init; }
 
     [JsonPropertyName("images")]
-    public IReadOnlyCollection<FlowCardImage>? Images { get; init; }
+    public FlatArray<FlowCardImage>? Images { get; init; }
 
     [JsonPropertyName("buttons")]
-    public IReadOnlyCollection<FlowCardAction>? Buttons { get; init; }
+    public FlatArray<FlowCardAction>? Buttons { get; init; }
 
     [JsonPropertyName("tap")]
     public FlowCardAction? Tap { get; init; }
