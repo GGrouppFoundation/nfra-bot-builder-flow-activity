@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace GGroupp.Infra.Bot.Builder;
+namespace GarageGroup.Infra.Bot.Builder;
 
 partial class FlowCardActionTypeJsonConverter
 {
