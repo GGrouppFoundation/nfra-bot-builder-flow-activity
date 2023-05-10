@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace GGroupp.Infra.Bot.Builder;
+namespace GarageGroup.Infra.Bot.Builder;
 
 [JsonConverter(typeof(CamelCaseEnumConverter))]
 public enum FlowDeliveryMode

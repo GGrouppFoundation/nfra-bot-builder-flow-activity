@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace GGroupp.Infra.Bot.Builder;
+namespace GarageGroup.Infra.Bot.Builder;
 
 [JsonConverter(typeof(FlowCardActionTypeJsonConverter))]
 public readonly partial struct FlowCardActionType : IEquatable<FlowCardActionType>
